@@ -1,5 +1,4 @@
-<?php 
-
+<?php \r\n
     namespace controllers;
 
     class BlogController    {
