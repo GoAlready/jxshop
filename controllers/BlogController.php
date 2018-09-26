@@ -1,4 +1,5 @@
-<?php \r\n
+<?php 
+
     namespace controllers;
 
     class BlogController    {
@@ -9,7 +10,7 @@
         }
 
         // 显示添加的表单
-        public function creat()
+        public function create()
         {
             view('blog/create');
         }
@@ -17,7 +18,10 @@
         // 处理添加的表单
         public function insert()
         {
-
+            $blog = new \models\Blog;
+            // 为模型填充数据
+            $blog->fill($_POST);
+            $blog->insert();
         }
 
         // 显示修改的表单

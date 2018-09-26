@@ -10,7 +10,7 @@
         }
 
         // 显示添加的表单
-        public function creat()
+        public function create()
         {
             view('<?=$tableName?>/create');
         }

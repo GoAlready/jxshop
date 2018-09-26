@@ -1,5 +1,6 @@
 <?php
     
+    // 加载视图函数
     function view($file,$data=[])
     {
         // 解压数组

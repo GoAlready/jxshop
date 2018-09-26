@@ -30,6 +30,21 @@
             // 生成视图目录
             @mkdir(ROOT.'views/'.$tableName,0777);
 
+
+            // 取出这个表中所有的字段信息
+            $sql = "SHOW FULL FIELDS FROM $tableName";
+            $db = \libs\Db::make();
+            $stmt = $db->prepare($sql);
+            // 执行sql
+            $stmt->execute();
+            // 取出数据
+            $fields = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+            // echo '<pre>';
+            // var_dump( $fields );
+
+            // exit;
+
             ob_start();
             include(ROOT.'templates/create.html');
             $str = ob_get_clean();
