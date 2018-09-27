@@ -114,6 +114,34 @@
                 </table>
             </div>
 
+            <h3>SKU <input id="btn-sku" type="button" value="添加一个sku"></h3>
+            <div id="sku-container">
+                <table width="100%">
+                    <tr>
+                        <td class="label">SKU名称:</td>
+                        <td>
+                            <input type='text' size="80" name='sku_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">库存量:</td>
+                        <td>
+                            <input type='text' size="80" name='stock[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">价格:</td>
+                        <td>
+                            ￥ <input type='text' size="10" name='price[]'> 元
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
             <div class="button-div">
                 <input type="submit" value=" 确定 " />
                 <input type="reset" value=" 重置 " />
@@ -201,6 +229,42 @@
                 // 在框的前面放一个图片
                 $(this).before("<div class='img_preview'><img src='"+str+"' width='120' height='120'></div>");
             });
+        });
+
+        // 添加SKU
+        var skuStr = `<hr><table width="100%"><tbody>
+                    <tr>
+                        <td class="label">SKU名称:</td>
+                        <td>
+                            <input type='text' size="80" name='sku_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">库存量:</td>
+                        <td>
+                            <input type='text' size="80" name='stock[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">价格:</td>
+                        <td>
+                            ￥ <input type='text' size="10" name='price[]'> 元
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label"></td>
+                        <td>
+                            <input onclick="del_attr(this)" type="button" value="删除">
+                        </td>
+                    </tr>
+                </tbody></table>`;
+        // 为添加sku绑定点击事件
+        $("#btn-sku").click(function(){
+            // 将字符串追加到页面中
+            $("#sku-container").append(skuStr);
         });
 
     // 三级联动
