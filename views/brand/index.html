@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>
-    <span class="action-span"><a href="/<?=$tableName?>/create">添加新记录</a></span>
+    <span class="action-span"><a href="/brand/create">添加新记录</a></span>
     <span class="action-span1"><a href="__GROUP__">管理中心</a></span>
     <span id="search_id" class="action-span1"> - 数据列表 </span>
     <div style="clear:both"></div>
@@ -17,36 +17,32 @@
 <div class="list-div" id="listDiv">
     <table cellpadding="3" cellspacing="1">
         <tr>
-            <?php foreach($fields as $v): ?>
-            <th><?=$v['Comment']?></th>
-            <?php endforeach; ?>
-            <th>操作</th>
+                        <th>ID</th>
+                        <th>品牌名称</th>
+                        <th>LOGO</th>
+                        <th>操作</th>
         </tr>
-        <?='<?php foreach($data as $v): ?>';?>
-        <tr>
-            <?php foreach($fields as $v): ?>
-            <td><?='<?=$v[\''.$v['Field'].'\']?>';?></td>
-            <?php endforeach; ?>
-            <td>
-                <a href="/<?=$tableName?>/edit?id=<?='<?=$v[\'id\']?>';?>">修改</a>
-                <a onclick="return confirm('确定要删除吗？');" href="/<?=$tableName?>/delete?id=<?='<?=$v[\'id\']?>';?>">删除</a>
+        <?php foreach($data as $v): ?>        <tr>
+                        <td><?=$v['id']?></td>
+                        <td><?=$v['brand_name']?></td>
+                        <td><?=$v['logo']?></td>
+                        <td>
+                <a href="/brand/edit?id=<?=$v['id']?>">修改</a>
+                <a onclick="return confirm('确定要删除吗？');" href="/brand/delete?id=<?=$v['id']?>">删除</a>
             </td>
         </tr>
-        <?='<?php endforeach; ?>';?>
-    </table>
+        <?php endforeach; ?>    </table>
 
 <!-- 分页开始 -->
     <table id="page-table" cellspacing="0">
         <tr>
             <td width="80%">&nbsp;</td>
             <td align="center" nowrap="true">
-                <?='<?=$page?>';?>
-            </td>
+                <?=$page?>            </td>
         </tr>
     </table>
 <!-- 分页结束 -->
 </div>
 
-<?="<?=view('common/footer')?>";?>
-</body>
+<?=view('common/footer')?></body>
 </html>

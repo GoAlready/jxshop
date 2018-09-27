@@ -1,38 +1,38 @@
+<?php
 namespace controllers;
 
-use models\<?=$mname?>;
+use models\Brand;
 
-class <?=$cname?>
-{
+class BrandController{
     // 列表页
     public function index()
     {
-        $model = new <?=$mname?>;
+        $model = new Brand;
         $data = $model->findAll();
-        view('<?=$tableName?>/index', $data);
+        view('brand/index', $data);
     }
 
     // 显示添加的表单
     public function create()
     {
-        view('<?=$tableName?>/create');
+        view('brand/create');
     }
 
     // 处理添加表单
     public function insert()
     {
-        $model = new <?=$mname?>;
+        $model = new Brand;
         $model->fill($_POST);
         $model->insert();
-        redirect('/<?=$tableName?>/index');
+        redirect('/brand/index');
     }
 
     // 显示修改的表单
     public function edit()
     {
-        $model = new <?=$mname?>;
+        $model = new Brand;
         $data=$model->findOne($_GET['id']);
-        view('<?=$tableName?>/edit', [
+        view('brand/edit', [
             'data' => $data,    
         ]);
     }
@@ -40,17 +40,17 @@ class <?=$cname?>
     // 修改表单的方法
     public function update()
     {
-        $model = new <?=$mname?>;
+        $model = new Brand;
         $model->fill($_POST);
         $model->update($_GET['id']);
-        redirect('/<?=$tableName?>/index');
+        redirect('/brand/index');
     }
 
     // 删除
     public function delete()
     {
-        $model = new <?=$mname?>;
+        $model = new Brand;
         $model->delete($_GET['id']);
-        redirect('/<?=$tableName?>/index');
+        redirect('/brand/index');
     }
 }
