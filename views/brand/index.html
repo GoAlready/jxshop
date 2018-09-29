@@ -25,7 +25,7 @@
         <?php foreach($data as $v): ?>        <tr>
                         <td><?=$v['id']?></td>
                         <td><?=$v['brand_name']?></td>
-                        <td><?=$v['logo']?></td>
+                        <td><img src="<?=$v['logo']?>" width="50" height="50"></td>
                         <td>
                 <a href="/brand/edit?id=<?=$v['id']?>">修改</a>
                 <a onclick="return confirm('确定要删除吗？');" href="/brand/delete?id=<?=$v['id']?>">删除</a>

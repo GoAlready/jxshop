@@ -8,7 +8,13 @@ class CategoryController{
     public function index()
     {
         $model = new Category;
-        $data = $model->findAll();
+
+        $data = $model->findAll([
+            'order_by' => 'concat(path,id,"-")',
+            'order_way' => 'asc',
+            'per_page' => 999999999,    //  不翻页
+        ]);
+        
         view('category/index', $data);
     }
 

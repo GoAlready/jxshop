@@ -26,8 +26,11 @@
                         <tr>
                 <td class="label">LOGO:</td>
                 <td>
-                                            <input type='text' size="80" name='logo' value='<?=$data['logo']?>'>
-                                        <font color="red">*</font>
+                    <div class="img_preview">
+                        <img src="<?=$data['logo']?>" width="120" height="120" alt="">
+                    </div>
+                    <input class="preview" type='file' name='logo'>
+                    <font color="red">*</font>
                 </td>
             </tr>
                     </table>
@@ -41,3 +44,6 @@
 <?=view('common/footer')?>
 </body>
 </html>
+
+<script src="/Js/jquery.min.js"></script>
+<script src="/Js/img_preview.js"></script>
