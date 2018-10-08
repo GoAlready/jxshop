@@ -39,6 +39,38 @@ use PDO;
     protected function _before_delete(){}
     protected function _after_delete(){}
 
+    // 递归树型结构的数据
+    public function tree()
+    {
+        // 先取出所有权限
+        $data = $this->findAll();
+        // 递归重新排序
+        $ret = $this->_tree($data['data']);
+
+        return $ret;
+    }
+
+    // 递归排序
+    protected function _tree($data,$parent_id = 0,$level = 0)
+    {
+        // 定义一个数组保存排序好的数据
+        static $_ret = [];
+        foreach($data as $v)
+        {
+            if($v['parent_id'] == $parent_id)
+            {
+                $v['level'] = $level;
+                // 放到排序后的数组中
+                $_ret[] = $v;
+                // 找$v的子分类
+                $this->_tree($data,$v['id'],$level+1);
+            }
+        }
+        // 返回排序好的数组
+        return $_ret;
+
+    }
+
     public function insert()
     {
         $this->_before_write();
@@ -119,6 +151,8 @@ use PDO;
             'order_by' => 'id',
             'order_way' => 'desc',
             'per_page'=>20,
+            'join'=>'',
+            'groupby'=>'',
         ];
 
         // 合并用户的配置
@@ -135,7 +169,9 @@ use PDO;
         
         $sql = "SELECT {$_option['fields']}
                  FROM {$this->table}
-                 WHERE {$_option['where']} 
+                 {$_option['join']}
+                 WHERE {$_option['where']}
+                 {$_option['groupby']} 
                  ORDER BY {$_option['order_by']} {$_option['order_way']} 
                  LIMIT $offset,{$_option['per_page']}";
 
