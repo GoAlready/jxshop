@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
 
-class CodeController
+class CodeController extends BaseController
 {
     // 生成代码
     public function make()

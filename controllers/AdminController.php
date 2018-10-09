@@ -3,7 +3,8 @@ namespace controllers;
 
 use models\Admin;
 
-class AdminController{
+class AdminController extends BaseController
+{
     // 列表页
     public function index()
     {
@@ -58,3 +59,5 @@ class AdminController{
         redirect('/admin/index');
     }
 }
+
+?>

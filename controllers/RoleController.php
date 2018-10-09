@@ -3,7 +3,8 @@ namespace controllers;
 
 use models\Role;
 
-class RoleController{
+class RoleController extends BaseController
+{
     // 列表页
     public function index()
     {
