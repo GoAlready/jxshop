@@ -15,7 +15,11 @@ class AdminController{
     // 显示添加的表单
     public function create()
     {
-        view('admin/create');
+        // 取出所有的角色
+        $model = new \models\Role;
+        $data = $model->findAll();
+        
+        view('admin/create',$data);
     }
 
     // 处理添加表单
