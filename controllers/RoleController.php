@@ -42,9 +42,20 @@ class RoleController{
     public function edit()
     {
         $model = new Role;
-        $data=$model->findOne($_GET['id']);
+        $data = $model->findOne($_GET['id']);
+
+        // 取出权限的数据
+        $priModel = new \models\Privilege;
+        // 获取树形数据(递归排序好的)
+        $priData = $priModel->tree();
+
+        // 取出这个角色所拥有权限的ID
+        $priIds = $model->getPriIds($_GET['id']);
+
         view('role/edit', [
-            'data' => $data,    
+            'data' => $data,
+            'priData' => $priData,
+            'priIds' => $priIds,    
         ]);
     }
 
