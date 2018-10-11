@@ -11,13 +11,16 @@ class Goods extends Model
     // 添加、修改之前执行
     public function _before_write()
     {
-        $this->_delete_logo();
-        // 实现上传图片的代码
-        $uploader = \libs\Uploader::make();
-        $logo = '/uploads/'.$uploader->upload('logo','goods');
-        // $this->data ：将要插入到数据库中的数据（数组）
-        // 把 logo 加到数组中，就可以插入到数据库
-        $this->data['logo'] = $logo;
+        if($_FILES['logo']['error'] == 0)
+        {
+            $this->_delete_logo();
+            // 实现上传图片的代码
+            $uploader = \libs\Uploader::make();
+            $logo = '/uploads/'.$uploader->upload('logo','goods');
+            // $this->data ：将要插入到数据库中的数据（数组）
+            // 把 logo 加到数组中，就可以插入到数据库
+            $this->data['logo'] = $logo;
+        }   
     }
 
     // 删除之前被调用（钩子函数：定义好之后自动被调用）
@@ -40,15 +43,42 @@ class Goods extends Model
     // 添加、修改之后执行
     public function _after_write()
     {
-        $stmt = $this->_db->prepare("insert into goods_attribute(attr_name,attr_value,goods_id) values(?,?,?)");
+        // 获取商品ID
+        $goodsId = isset($_GET['id']) ? $_GET['id'] : $this->data['id'];
+
+        // 先删除原来的属性
+        $stmt = $this->_db->prepare("DELETE FROM goods_attribute WHERE goods_id = ?");
+        $stmt -> execute([$goodsId]);
+
+        $stmt = $this->_db->prepare("INSERT INTO goods_attribute(attr_name,attr_value,goods_id) VALUES(?,?,?)");
         // 循环每一个属性,插入到属性表
-        foreach($_POST['attr_name'] as $k => $v)
+        if(isset($_POST['attr_name']))
         {
-            $stmt->execute([
-                $v,
-                $_POST['attr_value'][$k],
-                $this->data['id'],
-            ]);
+            foreach($_POST['attr_name'] as $k => $v)
+            {
+                $stmt->execute([
+                    $v,
+                    $_POST['attr_value'][$k],
+                    $goodsId,
+                ]);
+            }
+        }
+        
+        // 如果有要删除的图片ID,那就删除
+        if(isset($_POST['del_image']) && $_POST['del_image'] != '')
+        {
+            // 先根据ID把图片路径取出来
+            $stmt = $this->_db->prepare("SELECT path FROM goods_image WHERE id IN({$_POST['del_image']})");
+            $stmt->execute();
+            $path = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            // 循环每个图片的路径并删除
+            foreach($path as $v)
+            {
+                @unlink(ROOT.'public/'.$v['path']);
+            }
+            // 从数据库中把图片删除
+            $stmt = $this->_db->prepare("DELETE FROM goods_image WHERE id IN({$_POST['del_image']})");
+            $stmt->execute();
         }
 
         // 商品图片
@@ -60,34 +90,42 @@ class Goods extends Model
         // 循环图片
         foreach($_FILES['image']['name'] as $k => $v)
         {
-            // 拼出每张图片需要的数组
-            $_tmp['name'] = $v;
-            $_tmp['type'] = $_FILES['image']['type'][$k];
-            $_tmp['tmp_name'] = $_FILES['image']['tmp_name'][$k];
-            $_tmp['error'] = $_FILES['image']['error'][$k];
-            $_tmp['size'] = $_FILES['image']['size'][$k];
+            // 如果有图片并且上传成功时才处理图片
+            if($_FILES['image']['error'][$k] == 0)
+            {
+                // 拼出每张图片需要的数组
+                $_tmp['name'] = $v;
+                $_tmp['type'] = $_FILES['image']['type'][$k];
+                $_tmp['tmp_name'] = $_FILES['image']['tmp_name'][$k];
+                $_tmp['error'] = $_FILES['image']['error'][$k];
+                $_tmp['size'] = $_FILES['image']['size'][$k];
 
-            // 放到$_FILES数组中
-            $_FILES['tmp'] = $_tmp;
+                // 放到$_FILES数组中
+                $_FILES['tmp'] = $_tmp;
 
-            $path = '/uploads/'.$uploader->upload('tmp', 'goods');
+                $path = '/uploads/'.$uploader->upload('tmp', 'goods');
 
-            // 执行sql
-            $stmt->execute([
-                $this->data['id'],
-                $path,
-            ]);
+                // 执行sql
+                $stmt->execute([
+                    $goodsId,
+                    $path,
+                ]);
+            }
 
         }
 
         // SKU
+        // 先删除原来的SKU
+        $stmt = $this->_db->prepare("DELETE FROM goods_sku WHERE goods_id=?");
+        $stmt->execute([$goodsId]);
+
         $stmt = $this->_db->prepare("INSERT INTO goods_sku
         (goods_id,sku_name,stock,price) VALUES(?,?,?,?)");
 
         foreach($_POST['sku_name'] as $k => $v)
         {
             $stmt->execute([
-                $this->data['id'],
+                $goodsId,
                 $v,
                 $_POST['stock'][$k],
                 $_POST['price'][$k],
@@ -95,6 +133,33 @@ class Goods extends Model
         }
     }
 
+    // 获取商品所有的信息
+    public function getFullInfo($id)
+    {
+        // 获取商品的基本信息
+        $stmt = $this->_db->prepare("SELECT * FROM goods WHERE id = ?");
+        $stmt->execute([$id]);
+        $info = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // 获取商品属性信息
+        $stmt = $this->_db->prepare("SELECT * FROM goods_attribute WHERE goods_id=?");
+        $stmt->execute([$id]);
+        $attrs = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // 获取商品图片
+        $stmt = $this->_db->prepare("SELECT * FROM goods_image WHERE goods_id = ?");
+        $stmt->execute([$id]);
+        $images = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // 获取商品SKU
+        $stmt = $this->_db->prepare("SELECT * FROM goods_sku WHERE goods_id = ?");
+        $stmt->execute([$id]);
+        $skus = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        // 返回所有数据
+        return [
+            'info' => $info,
+            'images' => $images,
+            'skus' => $skus,
+            'attrs' => $attrs,
+        ];
+    }
 
 
 }

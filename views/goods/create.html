@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <title>管理中心 - 添加新记录</title>
     <meta name="robots" content="noindex, nofollow">
@@ -7,6 +8,7 @@
     <link href="/Styles/general.css" rel="stylesheet" type="text/css" />
     <link href="/Styles/main.css" rel="stylesheet" type="text/css" />
 </head>
+
 <body>
     <h1>
         <span class="action-span"><a href="/goods/index">数据列表</a></span>
@@ -17,21 +19,21 @@
     <div class="main-div">
         <form action="/goods/insert" method="post" enctype="multipart/form-data">
             <table width="100%" id="general-table">
-                                <tr>
+                <tr>
                     <td class="label">商品名称:</td>
                     <td>
                         <input type='text' size="80" name='goods_name'>
                         <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">LOGO:</td>
                     <td>
                         <input type='file' class="preview" name='logo'>
                         <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">是否上架:</td>
                     <td>
                         <input type="radio" name="is_on_sale" value="y" checked> 是
@@ -52,7 +54,9 @@
                         <select name="cat1_id">
                             <option value="">选择一级分类</option>
                             <?php foreach($topCat as $v): ?>
-                                <option value="<?=$v['id']?>"><?=$v['cat_name']?></option>
+                            <option value="<?=$v['id']?>">
+                                <?=$v['cat_name']?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                         <font color="red">*</font>
@@ -72,7 +76,7 @@
                         <font color="red">*</font>
                     </td>
                 </tr>
-                                <tr>
+                <tr>
                     <td class="label">品牌ID:</td>
                     <td>
                         <input type='text' size="80" name='brand_id'>
@@ -83,22 +87,22 @@
 
             <h3>商品属性 <input id="btn-attr" type="button" value="添加一个属性"></h3>
             <div id="attr-container">
-                    <table width="100%">
-                            <tr>
-                                <td class="label">属性名称:</td>
-                                <td>
-                                    <input type='text' size="80" name='attr_name[]'>
-                                    <font color="red">*</font>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label">属性值:</td>
-                                <td>
-                                    <input type='text' size="80" name='attr_value[]'>
-                                    <font color="red">*</font>
-                                </td>
-                            </tr>
-                    </table>
+                <table width="100%">
+                    <tr>
+                        <td class="label">属性名称:</td>
+                        <td>
+                            <input type='text' size="80" name='attr_name[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">属性值:</td>
+                        <td>
+                            <input type='text' size="80" name='attr_value[]'>
+                            <font color="red">*</font>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
             <h3>商品图片 <input id="btn-image" type="button" value="添加一个图片"></h3>
@@ -148,7 +152,9 @@
             </div>
         </form>
     </div>
-    <?=view('common/footer')?></body>
+    <?=view('common/footer')?>
+</body>
+
 </html>
 
 <script src="/Js/jquery.min.js"></script>
@@ -179,18 +185,16 @@
                                 </td>
                             </tr>
                     </tbody></table>`;
-    
+
     // 为按钮绑定事件
-    $("#btn-attr").click(function(){
+    $("#btn-attr").click(function () {
         // 将字符串追回到页面中
         $("#attr-container").append(attrStr);
     });
 
     // 删除添加的属性
-    function del_attr(o)
-    {
-        if(confirm("确定要删除嘛?"))
-        {
+    function del_attr(o) {
+        if (confirm("确定要删除嘛?")) {
             var table = $(o).parent().parent().parent().parent();
             table.prev('hr').remove();
             table.remove();
@@ -214,25 +218,25 @@
                     </tr>
                 </tbody></table>`;
 
-        // 为添加按钮绑定事件
-        $("#btn-image").click(function(){
-            // 添加一个图片
-            $("#image-container").append(imageStr);
-            // 绑定预览事件
-            $(".preview").change(function(){
-                // 获取选择的图片
-                var file = this.files[0];
-                // 转成字符串
-                var str = getObjectUrl(file);
-                // 先删除上一个
-                $(this).prev('.img_preview').remove();
-                // 在框的前面放一个图片
-                $(this).before("<div class='img_preview'><img src='"+str+"' width='120' height='120'></div>");
-            });
+    // 为添加按钮绑定事件
+    $("#btn-image").click(function () {
+        // 添加一个图片
+        $("#image-container").append(imageStr);
+        // 绑定预览事件
+        $(".preview").change(function () {
+            // 获取选择的图片
+            var file = this.files[0];
+            // 转成字符串
+            var str = getObjectUrl(file);
+            // 先删除上一个
+            $(this).prev('.img_preview').remove();
+            // 在框的前面放一个图片
+            $(this).before("<div class='img_preview'><img src='" + str + "' width='120' height='120'></div>");
         });
+    });
 
-        // 添加SKU
-        var skuStr = `<hr><table width="100%"><tbody>
+    // 添加SKU
+    var skuStr = `<hr><table width="100%"><tbody>
                     <tr>
                         <td class="label">SKU名称:</td>
                         <td>
@@ -261,29 +265,26 @@
                         </td>
                     </tr>
                 </tbody></table>`;
-        // 为添加sku绑定点击事件
-        $("#btn-sku").click(function(){
-            // 将字符串追加到页面中
-            $("#sku-container").append(skuStr);
-        });
+    // 为添加sku绑定点击事件
+    $("#btn-sku").click(function () {
+        // 将字符串追加到页面中
+        $("#sku-container").append(skuStr);
+    });
 
     // 三级联动
-    $("select[name=cat1_id]").change(function(){
+    $("select[name=cat1_id]").change(function () {
         // 取出这个分类的id
         var id = $(this).val();
         // 如果不为空就执行AJAX
-        if(id!="")
-        {
+        if (id != "") {
             $.ajax({
-                type:"GET",
-                url:"/goods/ajax_get_cat?id="+id,
-                dataType:"json",
-                success:function(data)
-                {
+                type: "GET",
+                url: "/goods/ajax_get_cat?id=" + id,
+                dataType: "json",
+                success: function (data) {
                     var str = "";
-                    for(var i=0;i<data.data.length;i++)
-                    {
-                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';
+                    for (var i = 0; i < data.data.length; i++) {
+                        str += '<option value="' + data.data[i].id + '">' + data.data[i].cat_name + '</option>';
                     }
                     // 把拼好的option放到第二个下拉框中
                     $("select[name=cat2_id]").html(str);
@@ -294,22 +295,19 @@
         }
     });
 
-    $("select[name=cat2_id]").change(function(){
+    $("select[name=cat2_id]").change(function () {
         // 取出这个分类的id
         var id = $(this).val();
         // 如果不为空就执行AJAX
-        if(id!="")
-        {
+        if (id != "") {
             $.ajax({
-                type:"GET",
-                url:"/goods/ajax_get_cat?id="+id,
-                dataType:"json",
-                success:function(data)
-                {
+                type: "GET",
+                url: "/goods/ajax_get_cat?id=" + id,
+                dataType: "json",
+                success: function (data) {
                     var str = "";
-                    for(var i=0;i<data.data.length;i++)
-                    {
-                        str += '<option value="'+data.data[i].id+'">'+data.data[i].cat_name+'</option>';
+                    for (var i = 0; i < data.data.length; i++) {
+                        str += '<option value="' + data.data[i].id + '">' + data.data[i].cat_name + '</option>';
                     }
                     // 把拼好的option放到第三个下拉框中
                     $("select[name=cat3_id]").html(str);
