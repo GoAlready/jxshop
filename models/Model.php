@@ -43,10 +43,12 @@ use PDO;
     public function tree()
     {
         // 先取出所有权限
-        $data = $this->findAll();
+        $sql = "SELECT * FROM {$this->table}";
+        $stmt = $this->_db->prepare($sql);
+        $stmt->execute();
+        $data = $stmt->fetchAll( PDO::FETCH_ASSOC );
         // 递归重新排序
-        $ret = $this->_tree($data['data']);
-
+        $ret = $this->_tree($data);
         return $ret;
     }
 

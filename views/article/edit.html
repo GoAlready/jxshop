@@ -7,51 +7,53 @@
 <link href="/Styles/main.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-<h1>
-    <span class="action-span"><a href="/article/index">数据列表</a></span>
-    <span class="action-span1"><a href="__GROUP__">管理中心</a></span>
-    <span id="search_id" class="action-span1"> - 修改数据 </span>
-    <div style="clear:both"></div>
-</h1>
-<div class="main-div">
-    <form action="/article/update?id=<?=$data['id']?>" method="post" enctype="multipart/form-data">
-        <table width="100%" id="general-table">
-                        <tr>
-                <td class="label">标题:</td>
-                <td>
-                                            <input type='text' size="80" name='title' value='<?=$data['title']?>'>
-                                        <font color="red">*</font>
-                </td>
-            </tr>
-                        <tr>
-                <td class="label">文章内容:</td>
-                <td>
-                                            <textarea name="content" id="" cols="80" rows="10"><?=$data['content']?></textarea>
-                                        <font color="red">*</font>
-                </td>
-            </tr>
-                        <tr>
-                <td class="label">跳转的地址:</td>
-                <td>
-                                            <input type='text' size="80" name='link' value='<?=$data['link']?>'>
-                                        <font color="red">*</font>
-                </td>
-            </tr>
-                        <tr>
-                <td class="label">关联的分类ID:</td>
-                <td>
-                                            <input type='text' size="80" name='article_category_id' value='<?=$data['article_category_id']?>'>
-                                        <font color="red">*</font>
-                </td>
-            </tr>
-                    </table>
-        <div class="button-div">
-            <input type="submit" value=" 确定 " />
-            <input type="reset" value=" 重置 " />
-        </div>
-    </form>
-</div>
+    <h1>
+        <span class="action-span"><a href="/article/index">数据列表</a></span>
+        <span class="action-span1"><a href="__GROUP__">管理中心</a></span>
+        <span id="search_id" class="action-span1"> - 修改数据 </span>
+        <div style="clear:both"></div>
+    </h1>
+    <div class="main-div">
+        <form action="/article/update?id=<?=$data['id']?>" method="post" enctype="multipart/form-data">
+            <table width="100%" id="general-table">
+                <tr>
+                    <td class="label">标题:</td>
+                    <td>
+                        <input type='text' size="80" name='title' value='<?=$data[' title']?>'>
+                        <font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">文章内容:</td>
+                    <td>
+                        <textarea name="content" id="" cols="80" rows="10"><?=$data['content']?></textarea>
+                        <font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">跳转的地址:</td>
+                    <td>
+                        <input type='text' size="80" name='link' value='<?=$data[' link']?>'>
+                        <font color="red">*</font>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">关联的分类ID:</td>
+                    <td>
+                        <input type='text' size="80" name='article_category_id' value='<?=$data['
+                            article_category_id']?>'>
+                        <font color="red">*</font>
+                    </td>
+                </tr>
+            </table>
+            <div class="button-div">
+                <input type="submit" value=" 确定 " />
+                <input type="reset" value=" 重置 " />
+            </div>
+        </form>
+    </div>
 
-<?=view('common/footer')?>
+    <?=view('common/footer')?>
 </body>
+
 </html>
